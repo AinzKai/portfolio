@@ -1,26 +1,598 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-inter);
+
+  /* Dark theme (default) */
+  --color-background: #0a0a0a;
+  --color-foreground: #e5e7eb;
+  --color-surface: #111111;
+  --color-surface-secondary: #1a1a1a;
+  --color-border: #1e1e1e;
+  --color-accent: #3b82f6;
+  --color-accent-hover: #2563eb;
+  --color-accent-soft: #1e40af;
+  --color-muted: #9ca3af;
+  --color-muted-hover: #6b7280;
+  --color-success: #22c55e;
+  --color-success-soft: #166534;
+  --color-error: #f87171;
+  --color-error-soft: #fef2f2;
+
+  /* Spacing scale extras */
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+  --spacing-26: 6.5rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html.light {
+  --color-background: #ffffff;
+  --color-foreground: #111827;
+  --color-surface: #f8fafc;
+  --color-surface-secondary: #f1f5f9;
+  --color-border: #e2e8f0;
+  --color-accent: #2563eb;
+  --color-accent-hover: #1d4ed8;
+  --color-accent-soft: #dbeafe;
+  --color-muted: #64748b;
+  --color-muted-hover: #475569;
+  --color-success: #16a34a;
+  --color-success-soft: #dcfce7;
+  --color-error: #ef4444;
+  --color-error-soft: #fee2e2;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: var(--color-foreground);
+  }
+
+  h1 {
+    font-size: 2.25rem;
+    line-height: 1.05;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+    line-height: 1.1;
+  }
+
+  h3 {
+    font-size: 1.35rem;
+    line-height: 1.15;
+  }
+
+  @media (min-width: 640px) {
+    h1 {
+      font-size: 2.75rem;
+    }
+    h2 {
+      font-size: 2.125rem;
+    }
+    h3 {
+      font-size: 1.55rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    h1 {
+      font-size: 3.5rem;
+    }
+    h2 {
+      font-size: 2.6rem;
+    }
+    h3 {
+      font-size: 1.9rem;
+    }
+  }
+
+  a {
+    color: inherit;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: #ffffff;
+  }
+
+  /* Custom focus ring */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  /* Inline text links get an underline on hover; interactive components
+     (nav, cards, buttons) opt out via `no-underline`. */
+  a:where(:not([class])):hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .scroll-pt-nav {
+    scroll-margin-top: 4.5rem;
+  }
+
+  /* ─── Entrance Animations ─── */
+
+  .animate-hero-up {
+    animation: hero-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out both;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* If JS never runs, keep reveal content visible instead of hidden. */
+  html:not(.js) .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  /* ─── Gradient Text ─── */
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--color-accent) 0%, #8b5cf6 50%, #06b6d4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-accent {
+    background: linear-gradient(135deg, var(--color-accent) 0%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ─── Animated Gradient Border ─── */
+
+  .gradient-border {
+    position: relative;
+    background: var(--color-surface);
+    border-radius: 0.75rem;
+  }
+
+  .gradient-border::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: linear-gradient(
+      135deg,
+      var(--color-accent),
+      #8b5cf6,
+      #06b6d4,
+      var(--color-accent)
+    );
+    background-size: 300% 300%;
+    animation: gradient-rotate 4s ease infinite;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .gradient-border:hover::before {
+    opacity: 1;
+  }
+
+  /* ─── Card Glow Effect ─── */
+
+  .card-glow {
+    transition: box-shadow 0.4s ease, transform 0.3s ease, border-color 0.3s ease;
+  }
+
+  .card-glow:hover {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--color-accent) 30%, transparent),
+      0 4px 24px -4px color-mix(in srgb, var(--color-accent) 15%, transparent),
+      0 12px 48px -8px color-mix(in srgb, var(--color-accent) 8%, transparent);
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  }
+
+  /* ─── Shimmer Effect ─── */
+
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--color-accent) 8%, transparent) 50%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    transition: transform 0s;
+  }
+
+  .shimmer:hover::after {
+    transform: translateX(100%);
+    transition: transform 0.7s ease;
+  }
+
+  /* ─── Floating Animation ─── */
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-float-slow {
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .animate-float-reverse {
+    animation: float-reverse 7s ease-in-out infinite;
+  }
+
+  /* ─── Pulse Dot ─── */
+
+  .pulse-dot {
+    position: relative;
+  }
+
+  .pulse-dot::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    background: var(--color-success);
+    animation: pulse-ring 2s ease-out infinite;
+  }
+
+  /* ─── Animated Nav Underline ─── */
+
+  .nav-underline {
+    position: relative;
+  }
+
+  .nav-underline::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    right: 50%;
+    height: 2px;
+    background: var(--color-accent);
+    border-radius: 1px;
+    transition: left 0.3s ease, right 0.3s ease;
+  }
+
+  .nav-underline:hover::after,
+  .nav-underline[aria-current="page"]::after {
+    left: 0;
+    right: 0;
+  }
+
+  /* ─── Scroll Progress Bar ─── */
+
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-accent), #8b5cf6);
+    z-index: 50;
+    transform-origin: left;
+    transition: transform 0.1s linear;
+  }
+
+  /* ─── Glassmorphism ─── */
+
+  .glass {
+    background: color-mix(in srgb, var(--color-background) 70%, transparent);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+  }
+
+  .glass-card {
+    background: color-mix(in srgb, var(--color-surface) 80%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* ─── Gradient Orbs (background decorations) ─── */
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+    pointer-events: none;
+  }
+
+  html.light .orb {
+    opacity: 0.08;
+  }
+
+  .orb-accent {
+    background: var(--color-accent);
+  }
+
+  .orb-purple {
+    background: #8b5cf6;
+  }
+
+  .orb-cyan {
+    background: #06b6d4;
+  }
+
+  /* ─── Icon Bounce on Hover ─── */
+
+  .icon-bounce {
+    transition: transform 0.3s ease;
+  }
+
+  .group:hover .icon-bounce {
+    animation: icon-bounce 0.5s ease;
+  }
+
+  /* ─── Spotlight / Glow for Popular Card ─── */
+
+  .spotlight {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .spotlight::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle at center,
+      color-mix(in srgb, var(--color-accent) 6%, transparent) 0%,
+      transparent 50%
+    );
+    animation: spotlight-rotate 8s linear infinite;
+    pointer-events: none;
+  }
+
+  /* ─── Input Focus Glow ─── */
+
+  .input-glow {
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .input-glow:focus {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 20%, transparent);
+    border-color: var(--color-accent);
+  }
+
+  /* ─── Animated Check (SVG) ─── */
+
+  .animate-check path {
+    stroke-dasharray: 24;
+    stroke-dashoffset: 24;
+    animation: draw-check 0.4s ease 0.2s forwards;
+  }
+
+  /* ─── Back to Top ─── */
+
+  .back-to-top {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  /*
+   * Theme color utility overrides.
+   * Tailwind v4 compiles @theme inline values to hardcoded hex in utilities.
+   * These overrides restore var() references so theme switching works.
+   */
+  .bg-background { background-color: var(--color-background); }
+  .bg-surface { background-color: var(--color-surface); }
+  .bg-surface-secondary { background-color: var(--color-surface-secondary); }
+  .bg-border { background-color: var(--color-border); }
+  .bg-accent { background-color: var(--color-accent); }
+  .bg-accent-soft { background-color: var(--color-accent-soft); }
+  .bg-muted { background-color: var(--color-muted); }
+  .bg-success { background-color: var(--color-success); }
+  .bg-success-soft { background-color: var(--color-success-soft); }
+  .bg-error { background-color: var(--color-error); }
+  .bg-error-soft { background-color: var(--color-error-soft); }
+
+  .text-foreground { color: var(--color-foreground); }
+  .text-muted { color: var(--color-muted); }
+  .text-accent { color: var(--color-accent); }
+  .text-accent-hover { color: var(--color-accent-hover); }
+  .text-success { color: var(--color-success); }
+  .text-error { color: var(--color-error); }
+  .text-background { color: var(--color-background); }
+  .text-border { color: var(--color-border); }
+
+  .border-border { border-color: var(--color-border); }
+  .border-accent { border-color: var(--color-accent); }
+  .border-error { border-color: var(--color-error); }
+
+  /* Opacity variants via color-mix */
+  .bg-background\/70 { background-color: color-mix(in srgb, var(--color-background) 70%, transparent); }
+  .bg-accent\/10 { background-color: color-mix(in srgb, var(--color-accent) 10%, transparent); }
+  .bg-accent\/50 { background-color: color-mix(in srgb, var(--color-accent) 50%, transparent); }
+  .bg-success\/10 { background-color: color-mix(in srgb, var(--color-success) 10%, transparent); }
+  .bg-muted\/20 { background-color: color-mix(in srgb, var(--color-muted) 20%, transparent); }
+  .bg-muted\/50 { background-color: color-mix(in srgb, var(--color-muted) 50%, transparent); }
+  .bg-surface-secondary\/50 { background-color: color-mix(in srgb, var(--color-surface-secondary) 50%, transparent); }
+  .border-accent\/50 { border-color: color-mix(in srgb, var(--color-accent) 50%, transparent); }
+  .border-border\/30 { border-color: color-mix(in srgb, var(--color-border) 30%, transparent); }
+
+  /* Hover state overrides — Tailwind compiles these to dark-theme hardcoded hex */
+  .hover\:bg-accent:hover { background-color: var(--color-accent); }
+  .hover\:bg-accent-hover:hover { background-color: var(--color-accent-hover); }
+  .hover\:bg-border:hover { background-color: var(--color-border); }
+  .hover\:bg-surface:hover { background-color: var(--color-surface); }
+  .hover\:bg-surface-secondary:hover { background-color: var(--color-surface-secondary); }
+  .hover\:border-accent:hover { border-color: var(--color-accent); }
+  .hover\:text-accent:hover { color: var(--color-accent); }
+  .hover\:text-accent-hover:hover { color: var(--color-accent-hover); }
+  .hover\:text-foreground:hover { color: var(--color-foreground); }
+
+  /* Focus state overrides */
+  .focus\:border-accent:focus { border-color: var(--color-accent); }
+  .focus-visible\:outline-accent:focus-visible { outline-color: var(--color-accent); }
+
+  /* Group hover overrides — selector must match Tailwind's .group:hover .group-hover\:xxx pattern */
+  .group:hover .group-hover\:text-accent { color: var(--color-accent); }
+}
+
+/* ─── Keyframes ─── */
+
+@keyframes hero-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes float-reverse {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(12px); }
+}
+
+@keyframes gradient-rotate {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+@keyframes icon-bounce {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-4px); }
+  60% { transform: translateY(-2px); }
+}
+
+@keyframes spotlight-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes draw-check {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes counter-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer-slide {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+/* ─── Custom Scrollbar ─── */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted);
 }

@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Muhammad Uzair Rizwan — Portfolio
+
+A portfolio website for Muhammad Uzair Rizwan, a freelance frontend developer specializing in modern websites, lead capture systems, and customer retention automation for international businesses.
+
+## Built with
+
+- **Next.js 16** (App Router, SSG)
+- **TypeScript**
+- **Tailwind CSS v4**
+- **Inter** font (via `next/font`)
+- **Lucide React** for interface icons
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the site.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/                    # Pages & routes (App Router)
+│   ├── api/contact/        # Contact form API endpoint (Resend)
+│   ├── about/              # About page
+│   ├── work/               # Project showcase
+│   │   └── [slug]/         # Dynamic project detail pages
+│   ├── services/           # Services page
+│   ├── pricing/            # Pricing page
+│   ├── process/            # How-it-works page
+│   ├── contact/            # Contact page
+│   ├── sitemap.ts          # Generated sitemap
+│   ├── robots.ts           # Generated robots.txt
+│   ├── opengraph-image.tsx # Social share image
+│   ├── icon.svg            # Site favicon
+│   └── layout.tsx          # Root layout
+├── components/             # Reusable UI components
+│   ├── ui/                 # Button, Badge
+│   ├── header.tsx          # Site header / navigation
+│   ├── footer.tsx          # Site footer
+│   ├── hero.tsx            # Hero section
+│   ├── project-card.tsx    # Project card component
+│   ├── service-card.tsx    # Service card component
+│   ├── pricing-card.tsx    # Pricing package card
+│   ├── cta-section.tsx     # Closing call-to-action block
+│   ├── reveal.tsx          # Scroll-in reveal animation
+│   ├── contact-form.tsx    # Contact form
+│   └── ...
+└── lib/                    # Data, utilities, theme
+```
 
-## Learn More
+## Data
 
-To learn more about Next.js, take a look at the following resources:
+All portfolio content (projects, services, pricing, process steps) is defined in `src/lib/data.ts`. Update this file to add new projects or modify existing content.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contact Form
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The contact form posts to `/api/contact`, which delivers messages via [Resend](https://resend.com). To enable real delivery, add the following to a local `.env` file (not committed):
 
-## Deploy on Vercel
+```bash
+RESEND_API_KEY=your_resend_api_key
+CONTACT_TO_EMAIL=your_email@example.com
+# Optional – defaults to onboarding@resend.dev
+CONTACT_FROM_EMAIL=no-reply@yourdomain.com
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Until these are configured, the API responds with a 503 and asks visitors to email directly.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Design
+
+The portfolio uses a dark theme by default with a light mode toggle. Colors are managed via Tailwind CSS v4's `@theme` directive with CSS custom properties, enabling smooth theme switching.
+
+## License
+
+All rights reserved. This is a personal portfolio — no client data or proprietary information is included.
